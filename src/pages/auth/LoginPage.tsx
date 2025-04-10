@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 const schema = yup.object({
   username: yup.string().required("Une pseudo est necessaire"),
@@ -15,6 +17,9 @@ type FormData = {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
+  const { setIsLogged, setEmail, setImage, setUserId, setRole, setUsername } =
+    useContext(UserContext);
 
   const sendCredentials = async (data: FormData) => {
     try {
@@ -30,8 +35,15 @@ export default function LoginPage() {
       if (!response.ok) {
         throw new Error("Erreur serveur");
       }
-      const responseData = await response.json();
-      console.log(responseData);
+      const { userInfo } = await response.json();
+      console.log(userInfo);
+
+      setIsLogged(true);
+      setEmail(userInfo.email);
+      setImage(userInfo.image);
+      setUserId(userInfo.id);
+      setUsername(userInfo.username);
+      setRole(userInfo.role);
       navigate("/");
     } catch (err) {
       console.error(err);
