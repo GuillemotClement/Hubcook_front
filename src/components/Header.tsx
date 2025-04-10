@@ -38,6 +38,7 @@ export default function Header() {
       </Link>
       <nav className='flex gap-2'>
         <NavLink to='/'>Accueil</NavLink>
+        <NavLink to='/recipe'>Recettes</NavLink>
       </nav>
 
       {isLogged ? (
